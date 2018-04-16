@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Turtle : MonoBehaviour {
 
-	public Vector2 speed = new Vector2(1, 1);
+	public Vector2 speed = new Vector2(200, 200);
 	Rigidbody2D rigid;
 
 	private Vector2 movement;
@@ -18,12 +18,12 @@ public class Turtle : MonoBehaviour {
 		float inputY = Input.GetAxis ("Vertical");
 
 		movement = new Vector2 (
-			speed.x * inputX * 0.15f,
-			speed.y * inputY * 0.15f);
+			speed.x * inputX * Time.deltaTime,
+			speed.y * inputY * Time.deltaTime);
+		
 	}
 	void FixedUpdate() {
 		rigid.velocity = movement;
-		movement = new Vector2 (0, 0);
 	}
 
 }
