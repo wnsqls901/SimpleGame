@@ -24,6 +24,11 @@ public class Mobs : MonoBehaviour
 		//StartCoroutine(Animate());
 	}
 	void Update() {
+		if (Target.transform.position.x > transform.position.x) {
+			render.flipX = true;
+		} else {
+			render.flipX = false;
+		}
 		Vector3 dir = Target.transform.position - transform.position;
 		dir.Normalize ();
 
