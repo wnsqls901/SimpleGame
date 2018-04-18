@@ -5,40 +5,59 @@ public class Mobs : MonoBehaviour
 {
 	static int AnimatorWalk = Animator.StringToHash("Walk");
 	static int AnimatorAttack = Animator.StringToHash("Attack");
+	Rigidbody2D rigid;
+
+	public GameObject Target;
+
+	public float movePower = 0.3f;
+
+	SpriteRenderer render;
+
 	Animator _animator;
-	void Awake()
-	{
-		_animator = GetComponentInChildren<Animator>();
-	}
+	int movementFlag; //left:0 Right:1 Up:2 Down:3 Idle:4
+
 	void Start()
 	{
-		StartCoroutine(Animate());
+		rigid = gameObject.GetComponent<Rigidbody2D> ();
+		render = gameObject.GetComponentInChildren<SpriteRenderer> ();
+		_animator = GetComponentInChildren<Animator>();
+		//StartCoroutine(Animate());
+	}
+	void Update() {
+		Vector3 dir = Target.transform.position - transform.position;
+		dir.Normalize ();
+
+		transform.position += dir * Time.deltaTime * movePower;
 	}
 	IEnumerator Animate()
 	{
-		int change = 1;
+		Vector3 moveVelocity = Vector3.zero;
 
-		yield return new WaitForSeconds(1f);
 		while (true)
 		{
-			_animator.SetBool(AnimatorWalk, true);
-			yield return new WaitForSeconds(1f);
-
-			_animator.transform.localScale = new Vector3(-5 * change, 5, 1);
-			change *= -1;
-			yield return new WaitForSeconds(1f);
-
-			_animator.SetBool(AnimatorWalk, false);
-			yield return new WaitForSeconds(1f);
-
-			_animator.SetTrigger(AnimatorAttack);
-			yield return new WaitForSeconds(1f);
-
-			_animator.SetTrigger(AnimatorAttack);
-			yield return new WaitForSeconds(1f);
-
-			_animator.SetTrigger(AnimatorAttack);
-			yield return new WaitForSeconds(5f);
+			movementFlag = Random.Range (0, 4);
+			float rand = Random.Range (0f, 3f);
+			if (movementFlag == 0) {
+				moveVelocity = Vector3.left;
+				_animator.SetBool(AnimatorWalk, true);
+				transform.position += moveVelocity * movePower * rand;
+				yield return new WaitForSeconds(1.3f);
+			} else if (movementFlag == 1) {
+				moveVelocity = Vector3.right;
+				_animator.SetBool(AnimatorWalk, true);
+				transform.position += moveVelocity * movePower * rand;
+				yield return new WaitForSeconds(1.3f);
+			} else if (movementFlag == 2) {
+				moveVelocity = Vector3.up;
+				_animator.SetBool(AnimatorWalk, true);
+				transform.position += moveVelocity * movePower * rand;
+				yield return new WaitForSeconds(1.3f);
+			}else if(movementFlag == 3) {
+				moveVelocity = Vector3.down;
+				_animator.SetBool(AnimatorWalk, true);
+				transform.position += moveVelocity * movePower * rand;
+				yield return new WaitForSeconds(1.3f);
+			}
 		}
 	}
 }
